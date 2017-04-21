@@ -4,15 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.haibo.umengshare.com.xhhread.MainActivity">
+    tools:context="com.xhhread.MainActivity">
 
     <Button
         android:id="@+id/bt_share"
-        android:background="#cc2323"
-        android:textSize="30sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="分享"/>
+        android:background="#cc2323"
+        android:text="分享"
+        android:textSize="30sp"/>
+    <Button
+        android:id="@+id/bt_logn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bt_share"
+        android:layout_centerInParent="true"
+        android:background="#cc2323"
+        android:text="登录"
+        android:textSize="30sp"/>
 
 </RelativeLayout>

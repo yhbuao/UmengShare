@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -11,12 +14,52 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+
+    signingConfigs {
+        debug {
+            storeFile file("../Xhhread.jks")
+            storePassword properties.getProperty("storePassword")
+            keyAlias "Xhhread.com"
+            keyPassword properties.getProperty("keyPassword")
+        }
+        //配置发布版签名信息
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            storeFile file("../Xhhread.jks")
+            storePassword properties.getProperty("storePassword")
+            keyAlias "Xhhread.com"
+            keyPassword properties.getProperty("keyPassword")
         }
     }
+
+
+    buildTypes {
+        release {
+            //不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            //打开混淆
+            minifyEnabled false
+            // 移除无用的resource文件
+            shrinkResources false
+            //Zipalign优化对包进行压缩
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            //显示Log
+            buildConfigField "boolean", "LEO_DEBUG", "true"
+            versionNameSuffix "-debug"
+            //在debug包下面进行配置是否需要混淆
+            renderscriptDebuggable false
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+    }
+
 }
 
 dependencies {

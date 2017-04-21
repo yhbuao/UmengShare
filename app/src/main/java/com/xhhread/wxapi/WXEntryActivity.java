@@ -1,4 +1,4 @@
-package com.haibo.umengshare.wxapi;
+package com.xhhread.wxapi;
 
 import com.umeng.weixin.callback.WXCallbackActivity;
 

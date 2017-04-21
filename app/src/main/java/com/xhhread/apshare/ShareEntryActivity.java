@@ -1,4 +1,4 @@
-package com.haibo.umengshare.apshare;
+package com.xhhread.apshare;
 
 import com.umeng.socialize.media.ShareCallbackActivity;
 
