@@ -1,5 +1,6 @@
 package com.xhhread;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -17,15 +18,18 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
+import com.umeng.socialize.utils.SocializeUtils;
 
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dialog = new ProgressDialog(this);
 
         UMImageMark umImageMark = new UMImageMark();
         umImageMark.setGravity(Gravity.BOTTOM | Gravity.RIGHT);
@@ -44,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 new ShareAction(MainActivity.this).withText("hello")
                         .withMedia(web)
                         .setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.ALIPAY, SHARE_MEDIA.DOUBAN
-                        ,SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.WEIXIN_FAVORITE,SHARE_MEDIA.QZONE,SHARE_MEDIA.TENCENT)
+                                , SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.WEIXIN_FAVORITE, SHARE_MEDIA.QZONE, SHARE_MEDIA.TENCENT)
                         .setCallback(umShareListener).open();
             }
         });
@@ -55,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
                 UMShareAPI.get(MainActivity.this).getPlatformInfo(MainActivity.this, SHARE_MEDIA.WEIXIN, umAuthListener);
             }
         });
-
-
 
 
     }
@@ -99,21 +101,26 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onStart(SHARE_MEDIA platform) {
             //授权开始的回调
+            SocializeUtils.safeShowDialog(dialog);
         }
+
         @Override
         public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+            SocializeUtils.safeCloseDialog(dialog);
             Toast.makeText(getApplicationContext(), "Authorize succeed", Toast.LENGTH_SHORT).show();
 
         }
 
         @Override
         public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-            Toast.makeText( getApplicationContext(), "Authorize fail", Toast.LENGTH_SHORT).show();
+            SocializeUtils.safeCloseDialog(dialog);
+            Toast.makeText(getApplicationContext(), "Authorize fail", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform, int action) {
-            Toast.makeText( getApplicationContext(), "Authorize cancel", Toast.LENGTH_SHORT).show();
+            SocializeUtils.safeCloseDialog(dialog);
+            Toast.makeText(getApplicationContext(), "Authorize cancel", Toast.LENGTH_SHORT).show();
         }
     };
 }
